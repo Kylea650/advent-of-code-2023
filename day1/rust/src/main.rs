@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 fn part_one(input: String) -> u32 {
+    // parse input string into 2D vector filtering out any non-numerical values
     let values = input
         .lines()
         .map(|x| {
@@ -12,6 +13,7 @@ fn part_one(input: String) -> u32 {
 
     let mut sum: u32 = 0;
 
+    // sum the first and last value from each line
     for line in values {
         sum += line[0] * 10;
         sum += line[line.len() - 1]
@@ -20,6 +22,7 @@ fn part_one(input: String) -> u32 {
 }
 
 fn part_two(input: String) -> u32 {
+    // parse input string into 2D vector of all characters
     let values = input
         .lines()
         .map(|x| x.split("").map(|x| x.to_string()).collect::<Vec<_>>())
@@ -41,33 +44,39 @@ fn part_two(input: String) -> u32 {
 
     for line in values {
         let mut converted_line: Vec<u32> = vec![];
-        let mut i: usize = 0;
         let mut word = "".to_string();
 
+        let mut i: usize = 0;
+
+        // iterate through each line. If the character is a number, add it to our list.
+        // if not, create a second pointer and start trying to build words
         while i < line.len() - 1 {
-            let char = line[i].clone();
+            let start_char = line[i].clone();
 
-            if char.parse::<u32>().is_ok() {
-                converted_line.push(char.parse::<u32>().unwrap());
-                word = "".to_string();
-                i += 1;
-            } else {
-                let mut j: usize = i + 1;
-                word.push_str(&char);
-
-                while j < line.len() {
-                    let char2 = line[j].clone();
-                    word.push_str(&char2);
-
-                    if let Some(x) = map.get(word.as_str()) {
-                        converted_line.push(x.parse::<u32>().unwrap());
-                        i += 1;
-                        break;
-                    }
-                    j += 1
+            match start_char.parse::<u32>() {
+                Ok(x) => {
+                    converted_line.push(x);
+                    word = "".to_string();
+                    i += 1;
                 }
-                word = "".to_string();
-                i += 1
+                Err(_) => {
+                    let mut j: usize = i + 1;
+                    word.push_str(&start_char);
+
+                    while j < line.len() {
+                        let end_char = line[j].clone();
+                        word.push_str(&end_char);
+
+                        // check if the word exists in the map and converted it to the associated numberical value
+                        if let Some(x) = map.get(word.as_str()) {
+                            converted_line.push(x.parse::<u32>().unwrap());
+                            i += 1;
+                        }
+                        j += 1
+                    }
+                    word = "".to_string();
+                    i += 1
+                }
             }
         }
         let last = line.last().unwrap().clone();
