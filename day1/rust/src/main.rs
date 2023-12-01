@@ -1,24 +1,19 @@
 use std::collections::HashMap;
 
 fn part_one(input: String) -> u32 {
-    // parse input string into 2D vector filtering out any non-numerical values
-    let values = input
+    // parse input string into 2D vector filtering out any non-numerical values and summing first and last
+    input
         .lines()
         .map(|x| {
-            x.split("")
-                .filter_map(|x| x.parse::<u32>().ok())
-                .collect::<Vec<_>>()
+            let mut vals = x.split("").filter_map(|x| x.parse::<u32>().ok());
+            let first = vals.next().unwrap();
+            let last = vals.last();
+            match last {
+                Some(last) => first * 10 + last,
+                None => first * 10 + first,
+            }
         })
-        .collect::<Vec<_>>();
-
-    let mut sum: u32 = 0;
-
-    // sum the first and last value from each line
-    for line in values {
-        sum += line[0] * 10;
-        sum += line[line.len() - 1]
-    }
-    sum
+        .sum::<u32>()
 }
 
 fn part_two(input: String) -> u32 {
