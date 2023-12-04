@@ -38,10 +38,9 @@ fn process(games: Vec<Vec<Vec<Vec<String>>>>) -> (u32, u32) {
 
                 let cur_max = max_colours.get(colour).unwrap();
 
-                if &count > max_cubes.get(colour).unwrap() {
+                if count > *max_cubes.get(colour).unwrap() {
                     round_possible.push(false)
                 }
-
                 if count > *cur_max {
                     max_colours.insert(colour, count);
                 }
