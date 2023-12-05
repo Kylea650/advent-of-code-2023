@@ -75,11 +75,11 @@ fn process(cards: &[HashMap<u32, Vec<u32>>]) -> (u32, u32) {
     // e.g if card 1 wins cards 2, 3 and 4 we remove card 1 from the left and add 2, 3, 4 to the right
     while !deque.is_empty() {
         if let Some(x) = deque.pop_front() {
-            let path = x;
+            let card = x;
             part_two += 1;
 
-            let start = path + 1;
-            let num_wins = card_wins.get(&path).unwrap();
+            let start = card + 1;
+            let num_wins = card_wins.get(&card).unwrap();
             let end = start + num_wins;
 
             for i in start..end {
