@@ -27,7 +27,6 @@ fn parse_input_part_two(input: &str) -> HashMap<&str, u64> {
                 .chars()
                 .filter(|x| !x.is_whitespace())
                 .collect::<String>();
-
             (label, converted_values.parse::<u64>().unwrap())
         })
         .collect()
